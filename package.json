@@ -5,6 +5,7 @@
   "main": "index.js",
   "dependencies": {
     "@polkadot/api": "^5.4.1",
+    "ethereumjs-tx": "^2.1.2",
     "ethers": "^5.4.3",
     "web3": "^1.5.1"
   },
@@ -18,6 +19,7 @@
   "scripts": {
     "start": "ts-node src/index",
     "inject": "ts-node src/inject",
+    "send": "ts-node src/sendtx",
     "seal": "ts-node src/manual_seal",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
