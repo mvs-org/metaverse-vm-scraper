@@ -46,7 +46,7 @@ async function main () {
 				console.log(tx.raw)
 				index++
 
-				await mvs.sendSignedTransaction(tx.raw)
+				mvs.sendSignedTransaction(tx.raw)
 			        .on('receipt', console.log)
 			        .catch(console.log);
 			}
