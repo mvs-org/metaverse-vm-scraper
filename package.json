@@ -19,6 +19,7 @@
   "scripts": {
     "start": "ts-node src/index",
     "inject": "ts-node src/inject",
+    "inrange": "ts-node src/inject_range",
     "send": "ts-node src/sendtx",
     "seal": "ts-node src/manual_seal",
     "test": "echo \"Error: no test specified\" && exit 1"
