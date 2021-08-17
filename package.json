@@ -1,7 +1,6 @@
 {
   "name": "metaverse-vm-scraper",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
   "dependencies": {
     "@polkadot/api": "^5.4.1",
@@ -26,5 +25,14 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mvs-org/metaverse-vm-scraper.git"
+  },
+  "bugs": {
+    "url": "https://github.com/mvs-org/metaverse-vm-scraper/issues"
+  },
+  "homepage": "https://github.com/mvs-org/metaverse-vm-scraper#readme",
+  "description": ""
 }
