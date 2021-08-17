@@ -28,8 +28,16 @@ async function main() {
         const blockHash = await api.rpc.chain.getBlockHash(i);
         const signedBlock = await api.rpc.chain.getBlock(blockHash);
         signedBlock.block.extrinsics.forEach((ex, index) => {
-            console.log(`block:${i} extrinsic_index:${index} info:`, ex.toHuman())
-            // const {isSigned, meta, method: {args, method, section}} = ex;
+            const {isSigned, meta, method: {args, method, section}} = ex;
+            if (section!="timestamp" && section!="authorship"){
+                // explicit display of name, args & documentation
+                console.log(`block:${i} extrinsic_index:${index} ${section}.${method}(${args.map((a) => a.toString()).join(', ')})`);
+                console.log(meta.documentation.map((d) => d.toString()).join('\n'));
+                // signer/nonce info
+                if (isSigned) {
+                    console.log(`signer=${ex.signer.toString()}, nonce=${ex.nonce.toString()}`);
+                }
+            }
         });
     }
 
