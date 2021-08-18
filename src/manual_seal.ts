@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const { ApiPromise } = require('@polkadot/api');
 const { HttpProvider } = require('@polkadot/rpc-provider');
+const axios = require('axios');
 
 const SCHEMA_PATH = path.join(__dirname, './', 'schema.json');
 const START_BLOCK = process.env.START_BLOCK ? parseInt(process.env.START_BLOCK, 10) : 0
@@ -25,8 +26,20 @@ async function main () {
 		});
 	}
 
-	let ret = await api.rpc.engine.createBlock(true, false)
-	console.log(`hash: ${ret.hash}`)
+	// let ret = await api.rpc.engine.createBlock(true, false)
+	// console.log(`hash: ${ret.hash}`)
+
+	const create_block = {
+		jsonrpc:"2.0",
+		id:1,
+		method:"engine_createBlock",
+		params: [true, false, 0, null]
+	}
+	await axios.post(NEW_URL, create_block)
+		.then(res => {
+			console.log(`statusCode: ${res.status}`)
+		})
+		.catch(console.log);
 }
 
 main().catch(console.error).finally(() => process.exit());
