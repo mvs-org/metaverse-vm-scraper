@@ -26,10 +26,11 @@ const sleep = (ms: number): Promise<void> =>
 
 async function main () {
 	// Create the API and wait until ready
-	let hapi;
+	let hapi, api;
 	if (!fs.existsSync(SCHEMA_PATH)) {
 		console.log('Custom Schema missing, using default schema.');
 		hapi = await ApiPromise.create({ hprovider });
+		api = await ApiPromise.create({ provider });
 	} else {
 		const { types, rpc } = JSON.parse(fs.readFileSync(SCHEMA_PATH, 'utf8'));
 		hapi = await ApiPromise.create({
@@ -37,14 +38,6 @@ async function main () {
 		  types,
 		  rpc,
 		});
-	}
-
-	let api;
-	if (!fs.existsSync(SCHEMA_PATH)) {
-		console.log('Custom Schema missing, using default schema.');
-		api = await ApiPromise.create({ provider });
-	} else {
-		const { types, rpc } = JSON.parse(fs.readFileSync(SCHEMA_PATH, 'utf8'));
 		api = await ApiPromise.create({
 		  provider,
 		  types,
@@ -52,7 +45,6 @@ async function main () {
 		});
 	}
 
-	let blockNumber = START_BLOCK
 	for (const nr of block_range) {
 		const blockHash = await hapi.rpc.chain.getBlockHash(nr);
     const hblock = await hapi.rpc.chain.getBlock(blockHash);
@@ -83,10 +75,11 @@ async function main () {
 		        .catch(console.log);
 		}
 		console.log('--------------')
-		// sleep 200ms for tx to be surely injected into block
-		await sleep(200);
+		// sleep 100ms for tx to be surely injected into block
+		await sleep(100);
 
 		//console.log(`timestamp: ${timestamp}`);
+
 		// use custom manual-seal RPC params
 		const create_block = {
 			jsonrpc:"2.0",
@@ -95,8 +88,6 @@ async function main () {
 			params: [true, false, timestamp, null]
 		}
 		await axios.post(NEW_URL, create_block).catch(console.log);
-
-		blockNumber++
 
 	}
 

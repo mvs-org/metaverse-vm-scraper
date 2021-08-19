@@ -24,10 +24,11 @@ const sleep = (ms: number): Promise<void> =>
 
 async function main () {
 	// Create the API and wait until ready
-	let hapi;
+	let hapi, api;
 	if (!fs.existsSync(SCHEMA_PATH)) {
 		console.log('Custom Schema missing, using default schema.');
 		hapi = await ApiPromise.create({ hprovider });
+		api = await ApiPromise.create({ provider });
 	} else {
 		const { types, rpc } = JSON.parse(fs.readFileSync(SCHEMA_PATH, 'utf8'));
 		hapi = await ApiPromise.create({
@@ -35,14 +36,6 @@ async function main () {
 		  types,
 		  rpc,
 		});
-	}
-
-	let api;
-	if (!fs.existsSync(SCHEMA_PATH)) {
-		console.log('Custom Schema missing, using default schema.');
-		api = await ApiPromise.create({ provider });
-	} else {
-		const { types, rpc } = JSON.parse(fs.readFileSync(SCHEMA_PATH, 'utf8'));
 		api = await ApiPromise.create({
 		  provider,
 		  types,
@@ -83,8 +76,10 @@ async function main () {
 				frontier.sendSignedTransaction(tx.raw)
 			        .on('receipt', console.log)
 			        .catch(console.log);
+			  await sleep(50);
 			}
 			console.log('--------------')
+
 			// sleep 200ms for tx to be surely injected into block
 			await sleep(200);
 		} 

@@ -29,6 +29,15 @@ async function main () {
 			const block = await mvs.getBlock(blockNumber)
 			console.log(`block ${block.number}: `)
 			block_range.push(block.number)
+
+			let index = 0
+			for (const txid of block.transactions) {
+				const tx = await mvs.getTransaction(txid)
+				console.log(`tx ${index}: ${tx.hash}`)
+				//console.log(tx.raw)
+				index++
+			}
+			console.log('--------------')
 		} 
 
 		blockNumber++
