@@ -9,7 +9,6 @@ const CHAIN_DATA_PATH = path.join(__dirname, './', 'chain.json');
 const START_BLOCK = process.env.START_BLOCK ? parseInt(process.env.START_BLOCK, 10) : 0
 const END_BLOCK = process.env.END_BLOCK ? parseInt(process.env.END_BLOCK, 10) : START_BLOCK+10
 const RPC_URL = process.env.RPC_URL || 'http://127.0.0.1:9933'
-const NEW_URL = process.env.NEW_URL || 'http://127.0.0.1:9934'
 
 const hprovider = new HttpProvider(RPC_URL);
 var web3 = new Web3(new Web3.providers.HttpProvider(RPC_URL));
@@ -32,8 +31,7 @@ async function main () {
 		});
 	}
 
-	let blockNumber = START_BLOCK
-	while(blockNumber<=END_BLOCK){
+	for (let blockNumber=START_BLOCK; blockNumber<=END_BLOCK; blockNumber++) {
 		const blockHash = await hapi.rpc.chain.getBlockHash(blockNumber);
 	    const hblock = await hapi.rpc.chain.getBlock(blockHash);
 	    let timestamp;
@@ -74,17 +72,21 @@ async function main () {
 		} 
 
 		chain.push(block);
-		blockNumber++
+		
+		if (blockNumber%1000 == 0) {
+			// pretty-print JSON object to string
+			const data = JSON.stringify(chain, null, 4);
+			try {
+			    fs.writeFileSync(CHAIN_DATA_PATH, data);
+			    console.log("Chain data is saved.");
+			} catch (error) {
+			    console.error(err);
+			}
+		}
+		
 	}
 
-	// pretty-print JSON object to string
-	const data = JSON.stringify(chain, null, 4);
-	try {
-	    fs.writeFileSync(CHAIN_DATA_PATH, data);
-	    console.log("Chain data is saved.");
-	} catch (error) {
-	    console.error(err);
-	}
+	
 }
 
 
