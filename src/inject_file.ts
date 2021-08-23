@@ -6,7 +6,8 @@ const { HttpProvider } = require('@polkadot/rpc-provider');
 const axios = require('axios');
 
 const SCHEMA_PATH = path.join(__dirname, './', 'schema.json');
-const CHAIN_DATA_PATH = path.join(__dirname, './', 'chain_100000.json');
+const CHAIN_DATA_PATH = path.join(__dirname, './', 'chain_200000.json');
+const ERR_TX_PATH = path.join(__dirname, './', 'err_tx.json');
 const START_BLOCK = process.env.START_BLOCK ? parseInt(process.env.START_BLOCK, 10) : 0
 const END_BLOCK = process.env.END_BLOCK ? parseInt(process.env.END_BLOCK, 10) : START_BLOCK+10
 const NEW_URL = process.env.NEW_URL || 'http://127.0.0.1:9934'
@@ -17,6 +18,17 @@ var frontier = new_web3.eth;
 
 const sleep = (ms: number): Promise<void> =>
   new Promise((resolve) => setTimeout(resolve, ms));
+
+var err_tx = [];
+function handle_err_tx (e: Error, block_nr: number, tx_hash: string) {
+	console.log(e);
+	var block = {
+			block: block_nr,
+			tx_hash: tx_hash,
+		}
+
+	err_tx.push(block);
+}
 
 async function main () {
 	// Create the API and wait until ready
@@ -50,6 +62,7 @@ async function main () {
 		}
 
 		if (block.tx_raw.length > 0) {
+			console.log(`block ${block.block}: `)
 			for (let i = 0; i < block.tx_raw.length; i++) {
 				var tx = block.tx_hash[i];
 				var tx_raw = block.tx_raw[i];
@@ -58,7 +71,7 @@ async function main () {
 				// shouldn't await coz using manual-seal
 				frontier.sendSignedTransaction(tx_raw)
 			        .on('receipt', console.log)
-			        .catch(console.log);
+			        .catch(e => handle_err_tx(e, block.block, block.tx_hash[i]))
 			  await sleep(50);
 			}
 			console.log('--------------')
@@ -80,7 +93,17 @@ async function main () {
 
 	// wait for tx receipt
 	await sleep(10000);
+
+	// pretty-print JSON object to string
+	const data = JSON.stringify(err_tx, null, 4);
+	try {
+	    fs.writeFileSync(ERR_TX_PATH, data);
+	    console.log("err_tx is saved.");
+	} catch (err) {
+	    console.error(err);
+	}
 }
+
 
 
 main().catch(console.error).finally(() => process.exit());

@@ -6,6 +6,7 @@ const { HttpProvider } = require('@polkadot/rpc-provider');
 
 const SCHEMA_PATH = path.join(__dirname, './', 'schema.json');
 const CHAIN_DATA_PATH = path.join(__dirname, './', 'chain.json');
+const BAD_BLOCK_PATH = path.join(__dirname, './', 'bad_blocks.json');
 const START_BLOCK = process.env.START_BLOCK ? parseInt(process.env.START_BLOCK, 10) : 0
 const END_BLOCK = process.env.END_BLOCK ? parseInt(process.env.END_BLOCK, 10) : START_BLOCK+10
 const RPC_URL = process.env.RPC_URL || 'http://127.0.0.1:9933'
@@ -15,6 +16,7 @@ var web3 = new Web3(new Web3.providers.HttpProvider(RPC_URL));
 var mvs = web3.eth;
 
 var chain = [];
+var err_blocks = [];
 
 async function main () {
 	// Create the API and wait until ready
@@ -62,10 +64,21 @@ async function main () {
 
 			let index = 0
 			for (const txid of block.transactions) {
-				const tx = await mvs.getTransaction(txid)
-				console.log(`tx ${index}: ${tx.hash}`)
-				tx_hash.push(tx.hash);
-				tx_raw.push(tx.raw);
+				try {
+					const tx = await mvs.getTransaction(txid)
+					console.log(`tx ${index}: ${tx.hash}`)
+					tx_hash.push(tx.hash);
+					tx_raw.push(tx.raw);
+				} catch (e) {
+					var err_block = {
+						block: blockNumber,
+						timestamp: timestamp,
+						tx_hash: txid,
+					}
+					err_blocks.push(err_block);
+					console.log(e);
+				}
+			
 				index++
 			}
 			console.log('--------------')
@@ -76,10 +89,12 @@ async function main () {
 		if (blockNumber%1000 == 0) {
 			// pretty-print JSON object to string
 			const data = JSON.stringify(chain, null, 4);
+			const blocks =  JSON.stringify(err_blocks, null, 4);
 			try {
 			    fs.writeFileSync(CHAIN_DATA_PATH, data);
+			    fs.writeFileSync(BAD_BLOCK_PATH, blocks);
 			    console.log("Chain data is saved.");
-			} catch (error) {
+			} catch (err) {
 			    console.error(err);
 			}
 		}
