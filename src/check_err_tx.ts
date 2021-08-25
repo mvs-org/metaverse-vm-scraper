@@ -18,41 +18,37 @@ var unexpected_err_txs = [];
 
 async function main () {
 
-	for (let blockNumber=START_BLOCK; blockNumber<=END_BLOCK; blockNumber++) {
-		
-		let err_txs;
-		if (!fs.existsSync(ERR_TX_PATH)) {
-			console.log('err_tx data missing.');
-			return;
-		} else {
-			err_txs = JSON.parse(fs.readFileSync(ERR_TX_PATH, 'utf8'));
-		}
+	let err_txs;
+	if (!fs.existsSync(ERR_TX_PATH)) {
+		console.log('err_tx data missing.');
+		return;
+	} else {
+		err_txs = JSON.parse(fs.readFileSync(ERR_TX_PATH, 'utf8'));
+	}
 
-	    for (const entry of err_txs) {
-	    	try {
-				const tx = await mvs.getTransactionReceipt(entry.tx_hash)
+    for (const entry of err_txs) {
+    	try {
+			const tx = await mvs.getTransactionReceipt(entry.tx_hash)
+			if (tx.status != false) {
 				console.log(`block: ${entry.block}`)
 				console.log(`tx: ${entry.tx_hash}`)
 				console.log('--------------')
-				if (tx.status != false) {
-					unexpected_err_txs.push(entry);
-				}
-			} catch (e) {
-				console.log(e);
+				unexpected_err_txs.push(entry);
 			}
-	    }
-
-		// pretty-print JSON object to string
-		const data = JSON.stringify(unexpected_err_txs, null, 4);
-		try {
-		    fs.writeFileSync(UNEXPECTED_TX_PATH, data);
-		    console.log("unexpected_tx is saved.");
-		} catch (err) {
-		    console.error(err);
+		} catch (e) {
+			console.log(e);
 		}
+    }
+
+	// pretty-print JSON object to string
+	const data = JSON.stringify(unexpected_err_txs, null, 4);
+	try {
+	    fs.writeFileSync(UNEXPECTED_TX_PATH, data);
+	    console.log("unexpected_tx is saved.");
+	} catch (err) {
+	    console.error(err);
 	}
 
-	
 }
 
 

@@ -6,7 +6,7 @@ const { HttpProvider } = require('@polkadot/rpc-provider');
 const axios = require('axios');
 
 const SCHEMA_PATH = path.join(__dirname, './', 'schema.json');
-const CHAIN_DATA_PATH = path.join(__dirname, './', 'chain_200000.json');
+const CHAIN_DATA_PATH = path.join(__dirname, './', 'chain_data.json');
 const ERR_TX_PATH = path.join(__dirname, './', 'err_tx.json');
 const START_BLOCK = process.env.START_BLOCK ? parseInt(process.env.START_BLOCK, 10) : 0
 const END_BLOCK = process.env.END_BLOCK ? parseInt(process.env.END_BLOCK, 10) : START_BLOCK+10
@@ -72,7 +72,7 @@ async function main () {
 				frontier.sendSignedTransaction(tx_raw)
 			        .on('receipt', console.log)
 			        .catch(e => handle_err_tx(e, block.block, block.tx_hash[i]))
-			  await sleep(50);
+			  await sleep(200);
 			}
 			console.log('--------------')
 
