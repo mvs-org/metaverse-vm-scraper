@@ -8,8 +8,8 @@ const axios = require('axios');
 const SCHEMA_PATH = path.join(__dirname, './', 'schema.json');
 const START_BLOCK = process.env.START_BLOCK ? parseInt(process.env.START_BLOCK, 10) : 0
 const END_BLOCK = process.env.END_BLOCK ? parseInt(process.env.END_BLOCK, 10) : START_BLOCK+5
-const RPC_URL = process.env.RPC_URL || 'http://127.0.0.1:9933'
-const NEW_URL = process.env.NEW_URL || 'http://127.0.0.1:9934'
+const RPC_URL = process.env.RPC_URL || 'http://127.0.0.1:19933'
+const NEW_URL = process.env.NEW_URL || 'http://127.0.0.1:9933'
 
 const hprovider = new HttpProvider(RPC_URL);
 const provider = new HttpProvider(NEW_URL);

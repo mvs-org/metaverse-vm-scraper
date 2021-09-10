@@ -7,9 +7,9 @@ const { HttpProvider } = require('@polkadot/rpc-provider');
 const SCHEMA_PATH = path.join(__dirname, './', 'schema.json');
 const CHAIN_DATA_PATH = path.join(__dirname, './', 'chain_data.json');
 const MISS_TX_PATH = path.join(__dirname, './', 'miss_tx.json');
-const START_BLOCK = process.env.START_BLOCK ? parseInt(process.env.START_BLOCK, 10) : 0
+const START_BLOCK = process.env.START_BLOCK ? parseInt(process.env.START_BLOCK, 10) : 1
 const END_BLOCK = process.env.END_BLOCK ? parseInt(process.env.END_BLOCK, 10) : START_BLOCK+10
-const RPC_URL = process.env.RPC_URL || 'http://127.0.0.1:9934'
+const RPC_URL = process.env.RPC_URL || 'http://127.0.0.1:9933'
 
 var web3 = new Web3(new Web3.providers.HttpProvider(RPC_URL));
 var mvs = web3.eth;

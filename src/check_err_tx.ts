@@ -9,7 +9,7 @@ const ERR_TX_PATH = path.join(__dirname, './', 'err_tx.json');
 const UNEXPECTED_TX_PATH = path.join(__dirname, './', 'unexpected_tx.json');
 const START_BLOCK = process.env.START_BLOCK ? parseInt(process.env.START_BLOCK, 10) : 0
 const END_BLOCK = process.env.END_BLOCK ? parseInt(process.env.END_BLOCK, 10) : START_BLOCK+10
-const RPC_URL = process.env.RPC_URL || 'http://127.0.0.1:9933'
+const RPC_URL = process.env.RPC_URL || 'http://127.0.0.1:19933'
 
 var web3 = new Web3(new Web3.providers.HttpProvider(RPC_URL));
 var mvs = web3.eth;

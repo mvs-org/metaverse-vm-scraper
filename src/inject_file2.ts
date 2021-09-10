@@ -6,7 +6,7 @@ const { HttpProvider } = require('@polkadot/rpc-provider');
 const axios = require('axios');
 
 const SCHEMA_PATH = path.join(__dirname, './', 'schema.json');
-const CHAIN_DATA_PATH = path.join(__dirname, './', 'chain_data.json');
+const CHAIN_DATA_PATH = path.join(__dirname, './', 'chain_100000.json');
 const ERR_TX_PATH = path.join(__dirname, './', 'err_tx.json');
 const START_BLOCK = process.env.START_BLOCK ? parseInt(process.env.START_BLOCK, 10) : 0
 const END_BLOCK = process.env.END_BLOCK ? parseInt(process.env.END_BLOCK, 10) : START_BLOCK+10
@@ -84,7 +84,7 @@ async function main () {
 			jsonrpc:"2.0",
 			id:1,
 			method:"engine_createBlock",
-			params: [true, false, block.timestamp, null]
+			params: [true, false, block.timestamp, null, null]
 		}
 		await axios.post(NEW_URL, create_block).catch(console.log);
 
