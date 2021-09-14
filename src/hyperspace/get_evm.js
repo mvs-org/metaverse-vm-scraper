@@ -4,14 +4,15 @@ const Web3 = require('web3');
 const { ApiPromise, WsProvider } = require('@polkadot/api');
 
 const SCHEMA_PATH = path.join(__dirname, '../', 'schema.json');
-const STORAGE_PATH = path.join(__dirname, './', 'storage.json');
+const EVM_STORAGE_PATH = path.join(__dirname, './', 'evm_storage.json');
 const BLOCK_HASH = process.env.BLOCK_HASH || "latest"
-const WS_URL = process.env.WS_URL || 'ws://127.0.0.1:9944'
+const WS_URL = process.env.WS_URL || 'ws://localhost:19944'
 
 const wsProvider = new WsProvider(WS_URL);
 
-let prefixes = ['0x26aa394eea5630e07c48ae0c9558cef7b99d880ec681799c0cf30e8886371da9' /* System.Account */];
-var storage = [];
+let prefixes = ['0x481e85de82e1da150ff69a0ce05ce20d' /* HyperspaceEVM */];
+//let prefixes = ['0x1da53b775b270400e7e61ed5cbc5a146' /* EVM */];
+var evm_storage = [];
 
 async function main () {
 	// Create the API and wait until ready
@@ -40,11 +41,11 @@ async function main () {
     // }
 
     console.log(pairs);
-    storage = pairs;
-    const data = JSON.stringify(storage, null, 4);
+    evm_storage = pairs;
+    const data = JSON.stringify(evm_storage, null, 4);
 	try {
-	    fs.writeFileSync(STORAGE_PATH, data);
-	    console.log("Storage is saved.");
+	    fs.writeFileSync(EVM_STORAGE_PATH, data);
+	    console.log("EVM storage is saved.");
 	} catch (err) {
 	    console.error(err);
 	}

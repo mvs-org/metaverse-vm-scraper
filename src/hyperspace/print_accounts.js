@@ -9,10 +9,10 @@ const util = require("@polkadot/util");
 const mapping = require("./address_mapping");
 
 const SPEC_PATH = path.join(__dirname, './', 'fork.json');
-const STORAGE_PATH = path.join(__dirname, './', 'storage.json');
-const STATE_DATA_PATH = path.join(__dirname, './', 'state.json');
+const ACCOUNT_STORAGE_PATH = path.join(__dirname, './', 'account_storage.json');
+const ACCOUNT_DATA_PATH = path.join(__dirname, './', 'account.json');
 const BLOCK_NR = process.env.BLOCK_NR ? parseInt(process.env.BLOCK_NR, 10) : "latest"
-const RPC_URL = process.env.RPC_URL || 'http://127.0.0.1:9933'
+const RPC_URL = process.env.RPC_URL || 'http://127.0.0.1:19933'
 
 var web3 = new Web3(new Web3.providers.HttpProvider(RPC_URL));
 var utils = web3.utils;
@@ -26,7 +26,7 @@ async function main () {
 	// let forkedSpec = JSON.parse(fs.readFileSync(SPEC_PATH, 'utf8'));
 	// let top = forkedSpec.genesis.raw.top
 
-	let storage = JSON.parse(fs.readFileSync(STORAGE_PATH, 'utf8'));
+	let storage = JSON.parse(fs.readFileSync(ACCOUNT_STORAGE_PATH, 'utf8'));
 
 	for (let entry of storage) {
 		let key = entry[0];
@@ -64,7 +64,7 @@ async function main () {
 	
 	const data = JSON.stringify(state_storages, null, 4);
 	try {
-	    fs.writeFileSync(STATE_DATA_PATH, data);
+	    fs.writeFileSync(ACCOUNT_DATA_PATH, data);
 	    console.log("state is saved.");
 	} catch (err) {
 	    console.error(err);
