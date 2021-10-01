@@ -33,7 +33,7 @@ async function main () {
 		jsonrpc:"2.0",
 		id:1,
 		method:"engine_createBlock",
-		params: [true, false, 1615323971000, '0x5b2bdfe3fc1d952d1e21c9714ae3b0e28ec244fc7310bdf31f395e5f710dffe9', null]
+		params: [true, false, 1615323971000, null]
 	}
 	await axios.post(NEW_URL, create_block)
 		.then(res => {
