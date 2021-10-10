@@ -160,7 +160,7 @@ async function main () {
 
 	// Generate chain spec for original and forked chains
 	execSync(BIN_PATH + ' build-spec --raw > ' + ORIGINAL_SPEC_PATH);
-	execSync(BIN_PATH + ' build-spec --disable-default-bootnode --dev --raw > ' + FORKED_SPEC_PATH);
+	execSync(BIN_PATH + ' build-spec --disable-default-bootnode --raw > ' + FORKED_SPEC_PATH);
 
 	let originalSpec = JSON.parse(fs.readFileSync(ORIGINAL_SPEC_PATH, 'utf8'));
 	let forkedSpec = JSON.parse(fs.readFileSync(FORKED_SPEC_PATH, 'utf8'));
