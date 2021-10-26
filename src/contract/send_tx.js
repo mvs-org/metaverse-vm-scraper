@@ -28,7 +28,7 @@ var to_addr = '0x3126D7C4c61C4cd154D7C1d7Aef3470d38F2B9b0';
 //send_value = utils.toWei(send_value, 'ether');
 
 // gas price
-const gas_price = utils.toWei('10', 'wei');
+const gas_price = utils.toWei('1', 'wei');
 const gas_limit = '60000'; //39000
 
 
@@ -84,6 +84,6 @@ async function SendTx (nonce, addr, value) {
 
 }
 
-//main().catch(console.error).finally(() => process.exit());
-SendRaw().catch(console.error);
+main().catch(console.error).finally(() => process.exit());
+//SendRaw().catch(console.error);
 
